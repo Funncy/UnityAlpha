@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		a = 5;
 	}
 	
 	// Update is called once per frame
