@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 	private GameState gameState;
 	private StartState startState;
 	private PushState pushState;
-	//private AttackState attackState;
+	private AttackState attackState;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 		startState.Init(this);
 		pushState = new PushState ();
 		pushState.Init (this);
+		attackState = new AttackState ();
+		attackState.Init (this);
 
 		gameState = startState;
 
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour {
 		 monster = Resources.Load ("Prefabs/Monster") as GameObject;
 		monster = Instantiate (monster, new Vector3 (2, 0, 0), Quaternion.identity);
 
-		print ("monster = " + monster.transform.position.x);
+		//print ("monster = " + monster.transform.position.x);
 
 		listMonster.Add (monster);
 
@@ -64,7 +66,8 @@ public class GameManager : MonoBehaviour {
 			gameState.Restart ();
 			break;
 		case 3:
-			gameState = null;
+			gameState = attackState;
+			gameState.Restart ();
 			break;
 		}
 	}
@@ -73,7 +76,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		gameState.Update ();
-		print ("gameManager = " + listMonster [0].transform.position.x);
+		//print ("gameManager = " + listMonster [0].transform.position.x);
 	}
 
 

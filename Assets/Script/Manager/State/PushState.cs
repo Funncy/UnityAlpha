@@ -9,7 +9,7 @@ public class PushState : GameState {
 
 	GameObject monster;
 
-	public float speed = 10f;
+	public float speed = 1f;
 
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
@@ -17,12 +17,15 @@ public class PushState : GameState {
 
 	public override void Restart(){
 		listMonster = gameManager.getListMonster ();
+		print ("List Monster Count = " + listMonster.Count);
+		print ("List Monster x = " + listMonster [0].transform.position.x);
+		Time.timeScale = 5f;
 	}
 
 	public override void Update () {
-		print ("push"+ listMonster.Count);
 
-		print ("push monster " + listMonster [0].transform.position.x);
+		if (listMonster.Count == 0)
+			gameManager.ChangeState (GameState.EndState);
 
 		if (listMonster [0].transform.position.x > -2) {  
 
@@ -31,6 +34,8 @@ public class PushState : GameState {
 				listMonster [i].transform.Translate (Vector3.left * speed * Time.deltaTime);
 			}
 		} else {
+			print ("change AttackMode");
+			Time.timeScale = 1f;
 			gameManager.ChangeState (GameState.AttackState);
 		}
 
