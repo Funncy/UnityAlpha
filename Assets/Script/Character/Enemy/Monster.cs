@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class Monster : MonoBehaviour {
 
-	public override void Push ();
-	public override void Attacked(char key);
+	public abstract void Push ();
+	public abstract void Attacked(char key);
 }

@@ -11,7 +11,7 @@ public class StartState : GameState {
 	}
 
 	public override void Update () {
-
+		
 	}
 
 	public override void Inputkey(char key){

@@ -5,9 +5,11 @@ using UnityEngine;
 public class PushState : GameState {
 
 	private GameManager gameManager;
+	private List<Monster> listMonster;
 
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
+
 	}
 
 	public override void Update () {

@@ -12,7 +12,7 @@ public class Player  : MonoBehaviour{
 	int AttackDamage_magic;
 
 	// Use this for initialization
-	public Player () {
+	void Start () {
 		//initilalize Character 
 		LV = 1; //temporary values
 		HP = 100;
