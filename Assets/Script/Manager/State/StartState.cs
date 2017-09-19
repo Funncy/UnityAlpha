@@ -5,11 +5,13 @@ using UnityEngine;
 public class StartState : GameState {
 
 	private GameManager gameManager;
-
+	private List<GameObject> listMonster;
 	float timer;
+
 
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
+		listMonster = gameManager.getListMonster ();
 	}
 
 	public override void Restart(){
@@ -18,13 +20,12 @@ public class StartState : GameState {
 	public override void Update () {
 		timer += Time.deltaTime;
 		if (timer > 1f) {
-			
-			print ("change push mode "+(int)State.Data.PushState);
+			if (!listMonster[0].GetComponent<Monster>().isRunning()) 
 			gameManager.ChangeState ((int)State.Data.PushState);
 		}
 	}
 
 	public override void Inputkey(char key){
-
+		
 	}
 }

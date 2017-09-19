@@ -17,10 +17,8 @@ public class EndState : GameState {
 	}
 
 	public override void Update () {
-		print ("game End");
 	}
 
 	public override void Inputkey(char key){
-
 	}
 }

@@ -18,7 +18,6 @@ public class FailState : GameState {
 
 	public override void Restart(){
 		timer = 0;
-		print ("Fail State Monster num=" + listMonster.Count);
 		foreach(var mons in listMonster){
 			mons.GetComponent<Monster> ().Fail ();
 
@@ -34,11 +33,9 @@ public class FailState : GameState {
 			gameManager.ChangeState ((int)State.Data.PushState);
 		}
 
-		print ("game Fail");
 	}
 
 	public override void Inputkey(char key){
-
 	}
 }
 

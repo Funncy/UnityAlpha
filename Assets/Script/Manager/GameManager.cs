@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -27,18 +28,14 @@ public class GameManager : MonoBehaviour {
 		//GameObject prefab = Resources.Load ("Prefab/Player") as GameObject;
 		//prefab.transform.parent = this;
 
-
-
+		GameObject tmp;
 		GameObject monster = Resources.Load ("Prefabs/Monster") as GameObject;
-		monster = Instantiate (monster, new Vector3 (0, 0, 0), Quaternion.identity);
-		listMonster.Add (monster);
-
-		 monster = Resources.Load ("Prefabs/Monster") as GameObject;
-		monster = Instantiate (monster, new Vector3 (2, 0, 0), Quaternion.identity);
-
+		for (int i = 0; i < 10; i += 2) {
+			print ("create monster " + i);
+			tmp = Instantiate (monster, new Vector3 (i, 0, 0), Quaternion.identity);
+			listMonster.Add (tmp);
+		}
 		//print ("monster = " + monster.transform.position.x);
-
-		listMonster.Add (monster);
 
 		//Monster create
 		//listMonster = new List<Monster> ();
@@ -66,7 +63,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void ChangeState(int state){
-		print("chnageState ="+state);
 		switch (state) {
 	
 		case (int)State.Data.StartState:
@@ -88,6 +84,11 @@ public class GameManager : MonoBehaviour {
 		}
 
 		gameState.Restart ();
+	}
+
+	public void PressButton(){
+		print (" press Button " + gameState);
+		gameState.Inputkey ('a');
 	}
 
 	
