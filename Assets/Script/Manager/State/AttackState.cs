@@ -9,12 +9,16 @@ public class AttackState : GameState {
 	private float timer;
 	private List<GameObject> listMonster;
 
+	private bool isAttacked;
+
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
+		listMonster = gameManager.getListMonster ();
 	}
 
 	public override void Restart(){
-		listMonster = gameManager.getListMonster ();
+		isAttacked = false;
+		timer = 0;
 	}
 
 	public override void Update () {
@@ -25,12 +29,19 @@ public class AttackState : GameState {
 			print ("change push mode");
 			//Time.timeScale = 1f;
 
-			listMonster [0].GetComponent<Rigidbody2D> ().AddForce (new Vector2 (500, 1000));
-			listMonster.RemoveAt (0);
+			if (isAttacked) {
+				listMonster [0].GetComponent<Rigidbody2D> ().AddForce (new Vector2 (500, 1000));
+				listMonster.RemoveAt (0);
 
-			gameManager.ChangeState (GameState.PushState);
-			timer = 0;
-
+				//all monster clear
+				if (listMonster.Count == 0)
+					gameManager.ChangeState ((int)State.Data.EndState);
+				else
+					gameManager.ChangeState ((int)State.Data.PushState);
+			} else {
+				print ("fail");
+				gameManager.ChangeState ((int)State.Data.FailState);
+			}
 		}
 	}
 

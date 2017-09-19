@@ -11,18 +11,11 @@ public class GameManager : MonoBehaviour {
 	private StartState startState;
 	private PushState pushState;
 	private AttackState attackState;
+	private EndState endState;
+	private FailState failState;
 
 	// Use this for initialization
 	void Start () {
-		//State Init
-		startState = new StartState ();
-		startState.Init(this);
-		pushState = new PushState ();
-		pushState.Init (this);
-		attackState = new AttackState ();
-		attackState.Init (this);
-
-		gameState = startState;
 
 		//Player Init
 		//bring Saved Player Data
@@ -51,6 +44,21 @@ public class GameManager : MonoBehaviour {
 		//listMonster = new List<Monster> ();
 
 
+
+		//State Init
+		startState = new StartState ();
+		startState.Init(this);
+		pushState = new PushState ();
+		pushState.Init (this);
+		attackState = new AttackState ();
+		attackState.Init (this);
+		endState = new EndState ();
+		endState.Init (this);
+		failState = new FailState ();
+		failState.Init (this);
+
+		gameState = startState;
+
 	}
 
 	public List<GameObject> getListMonster(){
@@ -58,18 +66,28 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void ChangeState(int state){
+		print("chnageState ="+state);
 		switch (state) {
-		case 1:
+	
+		case (int)State.Data.StartState:
+			gameState = startState;
 			break;
-		case 2:
+		case (int)State.Data.PushState:
 			gameState = pushState;
-			gameState.Restart ();
 			break;
-		case 3:
+		case (int)State.Data.AttackState:
 			gameState = attackState;
-			gameState.Restart ();
 			break;
+		case (int)State.Data.FailState:
+			gameState = failState;
+			break;
+		case (int)State.Data.EndState:
+			gameState = endState;
+			break;
+
 		}
+
+		gameState.Restart ();
 	}
 
 	
