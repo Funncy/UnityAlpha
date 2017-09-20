@@ -27,8 +27,8 @@ public class AttackState : GameState {
 		//print ("timer = " + timer);
 
 		if (listMonster [0].transform.position.x > -1.5) {
-			if(timer <0.5f )
-				//gameManager.ChangeState ((int)State.Data.PushState);
+			if(timer > 0.5f && !listMonster[listMonster.Count-1].GetComponent<Monster>().isRunning())
+				gameManager.ChangeState ((int)State.Data.PushState);
 			return;
 		}
 
@@ -51,21 +51,23 @@ public class AttackState : GameState {
 	}
 
 	public override void Inputkey(char key){
-		GameObject tmp = listMonster [0];
-		float lastPosX = listMonster [listMonster.Count-1].transform.position.x;
-		//print ("Inputkey Move X = " + lastPosX);
-		//print (" second x = " + listMonster [1].transform.position.x);
+		if (!isAttacked) {
+			GameObject tmp = listMonster [0];
+			float lastPosX = listMonster [listMonster.Count - 1].transform.position.x;
+			//print ("Inputkey Move X = " + lastPosX);
+			//print (" second x = " + listMonster [1].transform.position.x);
 
-		if (lastPosX > 11) {
-			tmp.GetComponent<Monster> ().Attacked (11, 0);
-		} else {
-			tmp.GetComponent<Monster> ().Attacked ( lastPosX + 4, 0);
+			//if (lastPosX > 11) {
+			//	tmp.GetComponent<Monster> ().Attacked (11, 0);
+			//} else {
+				tmp.GetComponent<Monster> ().Attacked (lastPosX + 4, 0);
+			//}
+			listMonster.RemoveAt (0);
+
+			listMonster.Add (tmp);
+			//print("new add Monster Index = "+listMonster[listMonster.Count-1].Equals (tmp));
+
+			isAttacked = true;
 		}
-		listMonster.RemoveAt (0);
-
-		listMonster.Add (tmp);
-		//print("new add Monster Index = "+listMonster[listMonster.Count-1].Equals (tmp));
-
-		isAttacked = true;
 	}
 }
