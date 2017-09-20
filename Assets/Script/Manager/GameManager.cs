@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour {
 	private EndState endState;
 	private FailState failState;
 
+	//remain queue number
+	private int MonsterQueueNum;
+
 	// Use this for initialization
 	void Start () {
 
@@ -24,10 +27,12 @@ public class GameManager : MonoBehaviour {
 
 		listMonster = new List<GameObject> ();
 
-		Instantiate (player, new Vector3 (-8.7f, -1.7f, 0), Quaternion.identity);
+		player = Instantiate (player, new Vector3 (-8.7f, -1.7f, 0), Quaternion.identity);
 		//GameObject prefab = Resources.Load ("Prefab/Player") as GameObject;
 		//prefab.transform.parent = this;
 
+
+		//temporary monster create
 		GameObject tmp;
 		GameObject monster = Resources.Load ("Prefabs/Monster") as GameObject;
 		for (int i = 0; i < 10; i += 2) {
@@ -35,10 +40,9 @@ public class GameManager : MonoBehaviour {
 			tmp = Instantiate (monster, new Vector3 (i, 0, 0), Quaternion.identity);
 			listMonster.Add (tmp);
 		}
-		//print ("monster = " + monster.transform.position.x);
 
-		//Monster create
-		//listMonster = new List<Monster> ();
+		MonsterQueueNum = 5;
+
 
 
 
@@ -58,13 +62,33 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public int GetRemainMonsterNum(){
+		return MonsterQueueNum;
+	}
+
 	public List<GameObject> getListMonster(){
 		return listMonster;
+	}
+		
+	public int GetAttackDamage(){
+		return player.GetComponent<Player> ().GetAttackDamage_sword ();
+	}
+
+	public void CreateRemainMonster(float x, float y){
+		if (MonsterQueueNum > 0) {
+			MonsterQueueNum--;
+			print ("Create New Monster " + x + " " + y);
+			GameObject tmp;
+			GameObject monster = Resources.Load ("Prefabs/Monster") as GameObject;
+			tmp = Instantiate (monster, new Vector3 (x, y, 0), Quaternion.identity);
+			listMonster.Add (tmp);
+
+		}
 	}
 
 	public void ChangeState(int state){
 		switch (state) {
-	
+
 		case (int)State.Data.StartState:
 			gameState = startState;
 			break;
@@ -82,12 +106,11 @@ public class GameManager : MonoBehaviour {
 			break;
 
 		}
-
+		print("Stage Chnage "+state);
 		gameState.Restart ();
 	}
 
 	public void PressButton(){
-		print (" press Button " + gameState);
 		gameState.Inputkey ('a');
 	}
 

@@ -18,9 +18,7 @@ public class PushState : GameState {
 
 	public override void Restart(){
 		Time.timeScale = 5f;
-		print ("all monster move");
 		for (int i = 0; i < listMonster.Count; i++) {
-			print ("Monster " + i + " " + listMonster [i].transform.position.x);
 			listMonster [i].GetComponent<Monster> ().Move ();
 		}
 	}
@@ -32,7 +30,6 @@ public class PushState : GameState {
 	
 
 		if (!listMonster[0].GetComponent<Monster>().isRunning()) {  
-			print ("change Attack state");
 			Time.timeScale = 1f;
 			gameManager.ChangeState ((int)State.Data.AttackState);
 		}

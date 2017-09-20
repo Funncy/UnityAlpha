@@ -21,6 +21,10 @@ public class Player  : MonoBehaviour{
 		AttackDamage_magic = 10;
 		AttackDamage_sword = 10;
 	}
+
+	public int GetAttackDamage_sword(){
+		return AttackDamage_sword;
+	}
 	
 	// Update is called once per frame
 	void Update () {

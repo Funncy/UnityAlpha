@@ -24,6 +24,11 @@ public class DefaultMonster : Monster {
 		isRun = false;
 	}
 
+	public override int GetHP(){
+		return HP;
+	}
+		
+
 	public override void Fail(){
 		//print ("Fail Called "+isRun);
 		Vector2 start = transform.position;
@@ -41,12 +46,13 @@ public class DefaultMonster : Monster {
 		StartCoroutine (SmoothMovement (end));
 	}
 
-	public override void Attacked(float x ,float y){
+	public override void Attacked(float x ,float y,int damage){
 		//print ("Attacked Called "+isRun);
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (10, 7);
-		Vector3 end2 = start + new Vector2 (x, 0);
+		Vector2 end2 = new Vector2 (x, 0);
 		isRun = true;
+		HP -= damage; //HP decrease
 		StartCoroutine (SmoothAttacked (end1, end2));
 	}
 
@@ -60,16 +66,15 @@ public class DefaultMonster : Monster {
 			sqrREmainingDistance = (transform.position - end1).sqrMagnitude;
 			yield return null;
 		}
+		if (HP > 0) {
 
-		//print ("SmoothAttacked x = " + end2.x+" y="+end2.y);
-		if (end2.x < 11) {
 			transform.position = new Vector3 (end2.x, end2.y, 0);
+			isRun = false;
 		} else {
-			transform.position = new Vector3 (11, 0, 0);
+			isRun = false;
+			//destroy
 		}
-
-		isRun = false;
-		print ("Attacked End x="+transform.position.x+" y="+transform.position.y);
+		//print ("Attacked End x="+transform.position.x+" y="+transform.position.y+" HP="+HP);
 	}
 
 

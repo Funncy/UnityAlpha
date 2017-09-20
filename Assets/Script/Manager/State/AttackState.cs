@@ -25,15 +25,16 @@ public class AttackState : GameState {
 		//Time.timeScale = 1f;
 		timer += Time.deltaTime;
 		//print ("timer = " + timer);
+		if (listMonster.Count == 0)
+			gameManager.ChangeState ((int)State.Data.EndState);
 
 		if (listMonster [0].transform.position.x > -1.5) {
-			if(timer > 0.5f && !listMonster[listMonster.Count-1].GetComponent<Monster>().isRunning())
+			if (timer > 0.5f && !listMonster [listMonster.Count - 1].GetComponent<Monster> ().isRunning ()) {
 				gameManager.ChangeState ((int)State.Data.PushState);
-			return;
+			}
 		}
 
 		if (isAttacked) {
-			//print ("isAttacked "+listMonster [listMonster.Count - 1].GetComponent<Monster> ().isRunning ());
 			if (listMonster.Count == 0)
 				gameManager.ChangeState ((int)State.Data.EndState);
 			else if (!listMonster [listMonster.Count - 1].GetComponent<Monster> ().isRunning ()) {
@@ -51,21 +52,24 @@ public class AttackState : GameState {
 	}
 
 	public override void Inputkey(char key){
-		if (!isAttacked) {
-			GameObject tmp = listMonster [0];
-			float lastPosX = listMonster [listMonster.Count - 1].transform.position.x;
-			//print ("Inputkey Move X = " + lastPosX);
-			//print (" second x = " + listMonster [1].transform.position.x);
+		//공격키 한번만 입력 되게 하기 
+		if (!isAttacked && listMonster.Count>0) {
+			GameObject tmp = listMonster [0]; //죽지않았경우 다시 넣기 위한 임시 저장 
+			float lastPosX = listMonster [listMonster.Count - 1].transform.position.x; 
 
-			//if (lastPosX > 11) {
-			//	tmp.GetComponent<Monster> ().Attacked (11, 0);
-			//} else {
-				tmp.GetComponent<Monster> ().Attacked (lastPosX + 4, 0);
-			//}
+			//Attacked
+			tmp.GetComponent<Monster> ().Attacked (lastPosX + 2, 0,gameManager.GetAttackDamage());
 			listMonster.RemoveAt (0);
 
-			listMonster.Add (tmp);
-			//print("new add Monster Index = "+listMonster[listMonster.Count-1].Equals (tmp));
+			//still Alive
+			if (tmp.GetComponent<Monster> ().GetHP () > 0) {
+				listMonster.Add(tmp);
+			}else {
+				//Create New Monster
+				gameManager.CreateRemainMonster (lastPosX + 2,0);
+			}
+
+
 
 			isAttacked = true;
 		}
