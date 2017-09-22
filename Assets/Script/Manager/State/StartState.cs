@@ -20,7 +20,7 @@ public class StartState : GameState {
 	public override void Update () {
 		timer += Time.deltaTime;
 		if (timer > 1f) {
-			if (!listMonster[0].GetComponent<Monster>().isRunning()) 
+			if (!gameManager.GetRunning()) 
 			gameManager.ChangeState ((int)State.Data.PushState);
 		}
 	}

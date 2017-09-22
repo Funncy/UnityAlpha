@@ -22,14 +22,14 @@ public class AttackState : GameState {
 	}
 
 	public override void Update () {
-		//Time.timeScale = 1f;
+		Time.timeScale = 1f;
 		timer += Time.deltaTime;
-		//print ("timer = " + timer);
+
 		if (listMonster.Count == 0)
 			gameManager.ChangeState ((int)State.Data.EndState);
 
 		if (listMonster [0].transform.position.x > -1.5) {
-			if (timer > 0.5f && !listMonster [listMonster.Count - 1].GetComponent<Monster> ().isRunning ()) {
+			if (timer > 0.5f && !gameManager.GetRunning()) {
 				gameManager.ChangeState ((int)State.Data.PushState);
 			}
 		}
@@ -37,18 +37,19 @@ public class AttackState : GameState {
 		if (isAttacked) {
 			if (listMonster.Count == 0)
 				gameManager.ChangeState ((int)State.Data.EndState);
-			else if (!listMonster [listMonster.Count - 1].GetComponent<Monster> ().isRunning ()) {
+			else if (!gameManager.GetRunning()) {
 				//print ("Attacked clear Push Start");
 				gameManager.ChangeState ((int)State.Data.PushState);
 			}
 		}else if (timer > 1f) {
 			//Time Over  -> fail State	
-			if (!listMonster [0].GetComponent<Monster> ().isRunning ())
-				//print ("change Fail state");
-				gameManager.ChangeState ((int)State.Data.FailState);
+			if (!gameManager.GetRunning ()) {
+				if (!gameManager.AttakedPlayer (listMonster [0].GetComponent<Monster> ().GetDamage ()))
+					gameManager.ChangeState ((int)State.Data.EndState);
+				else
+					gameManager.ChangeState ((int)State.Data.FailState);
+			}
 		}
-
-
 	}
 
 	public override void Inputkey(char key){
@@ -66,9 +67,11 @@ public class AttackState : GameState {
 
 			//still Alive
 			if (tmp.GetComponent<Monster> ().GetHP () > 0) {
+				print ("Monster Still alive");
 				listMonster.Add(tmp);
 			}else {
 				//Create New Monster
+				print("Monster die and create monster");
 				gameManager.CreateRemainMonster (lastPosX + 2,0);
 			}
 

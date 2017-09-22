@@ -11,30 +11,21 @@ public class DefaultMonster : Monster {
 	private float speed;
 
 	private float inverseMoveTime;
-	private bool isRun;
+	private GameManager gameManager;
 
 	public void Awake(){
-		print ("Awake");
 		speed = .2f;
 		HP = 10;
 		Armor = 5;
 		AttackDamage = 10;
 		inverseMoveTime = 1f / speed;
 		rb2d = GetComponent<Rigidbody2D> ();
-		isRun = false;
 	}
 
-
-
-	public void Init(){
-		speed = .2f;
-		HP = 10;
-		Armor = 5;
-		AttackDamage = 10;
-		inverseMoveTime = 1f / speed;
-		rb2d = GetComponent<Rigidbody2D> ();
-		isRun = false;
+	public override void SetManager(GameManager gameManager){
+		this.gameManager = gameManager;
 	}
+		
 
 	public override int GetHP(){
 		return HP;
@@ -52,7 +43,7 @@ public class DefaultMonster : Monster {
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (1.5f, 1.5f);
 		Vector2 end2 = start + new Vector2 (2, 0);
-		isRun = true;
+		gameManager.SetRunning (true);
 		StartCoroutine (SmoothFail (end1, end2));
 	}
 
@@ -60,7 +51,7 @@ public class DefaultMonster : Monster {
 		print ("Move Called ");
 		Vector2 start = transform.position;
 		Vector2 end = start + new Vector2 (-2, 0);
-		isRun = true;
+		gameManager.SetRunning (true);
 		StartCoroutine (SmoothMovement (end));
 	}
 
@@ -69,16 +60,17 @@ public class DefaultMonster : Monster {
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (10, 7);
 		Vector2 end2 = new Vector2 (x, 0);
-		isRun = true;
+		gameManager.SetRunning (true);
 		HP -= damage; //HP decrease
 		StartCoroutine (SmoothAttacked (end1, end2));
 	}
 
 	protected IEnumerator SmoothAttacked (Vector3 end1, Vector3 end2){
-		print ("SmoothAttacked start timescale="+Time.timeScale+" speed="+speed+" inverspeed="+inverseMoveTime);
+		//print ("SmoothAttacked start timescale="+Time.timeScale+" speed="+speed+" inverspeed="+inverseMoveTime);
 		float sqrREmainingDistance = (transform.position - end1).sqrMagnitude;
 
 		while (sqrREmainingDistance > float.Epsilon) {
+			//print ("SmoothAttacked timescale="+Time.timeScale+" speed="+speed+" inverspeed="+inverseMoveTime+" rb2d="+rb2d);
 			Vector3 newPosition = Vector3.MoveTowards (rb2d.position, end1, inverseMoveTime * Time.deltaTime * 5);
 			rb2d.MovePosition (newPosition);
 			sqrREmainingDistance = (transform.position - end1).sqrMagnitude;
@@ -87,9 +79,10 @@ public class DefaultMonster : Monster {
 		if (HP > 0) {
 
 			transform.position = new Vector3 (end2.x, end2.y, 0);
-			isRun = false;
+			gameManager.SetAttackEnd (false);
 		} else {
-			isRun = false;
+			gameManager.SetAttackEnd (false);
+			print ("Destroy");
 			Destroy (gameObject);
 		}
 		//print ("Attacked End x="+transform.position.x+" y="+transform.position.y+" HP="+HP);
@@ -116,13 +109,13 @@ public class DefaultMonster : Monster {
 			sqrREmainingDistance = (transform.position - end2).sqrMagnitude;
 			yield return null;
 		}
-		isRun = false;
+		gameManager.SetRunning (false);
 		//print ("SmoothFail End");
 	}
 
 	protected IEnumerator SmoothMovement (Vector3 end){
 		
-		print ("SmoothMovement  monster start x="+end.x+" y="+end.y+" MoveTime="+inverseMoveTime+" speed="+speed);
+		print ("SmoothMovement  monster MoveTime="+inverseMoveTime+" speed="+speed+" Time Scale="+Time.timeScale);
 		float sqrREmainingDistance = (transform.position - end).sqrMagnitude;
 		while (sqrREmainingDistance > float.Epsilon) {
 			Vector3 newPosition = Vector3.MoveTowards (rb2d.position, end, inverseMoveTime * Time.deltaTime);
@@ -130,13 +123,10 @@ public class DefaultMonster : Monster {
 			sqrREmainingDistance = (transform.position - end).sqrMagnitude;
 			yield return null;
 		}
-		isRun = false;
+		gameManager.SetRunning (false);
 		//print ("SmoothMovement End");
 	}
 
-	public override bool isRunning(){
-		return isRun;
-	}
 
 	public override void Push ()
 	{

@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour {
 	private int Combo;
 
 	private GameObject monster;
+	private bool isRunningMonster;
+	private int RunningCount;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +31,8 @@ public class GameManager : MonoBehaviour {
 		//bring Saved Player Data
 		//player = new Player();
 		Combo = 0;
+		RunningCount = 0;
+		isRunningMonster = false;
 
 		listMonster = new List<GameObject> ();
 
@@ -41,8 +45,8 @@ public class GameManager : MonoBehaviour {
 		GameObject tmp;
 		monster = Resources.Load ("Prefabs/Monster") as GameObject;
 		for (int i = 0; i < 10; i += 2) {
-			print ("create monster " + i);
 			tmp = Instantiate (monster, new Vector3 (i, 0, 0), Quaternion.identity);
+			tmp.GetComponent<Monster> ().SetManager (this);
 			listMonster.Add (tmp);
 		}
 
@@ -65,6 +69,27 @@ public class GameManager : MonoBehaviour {
 
 		gameState = startState;
 
+	}
+
+	public void SetAttackEnd(bool running){
+		isRunningMonster = running;
+	}
+
+	public void SetRunning(bool running){
+		if (!running) {
+			RunningCount += 1;
+			if (RunningCount == listMonster.Count) {
+				isRunningMonster = running;
+				RunningCount = 0;
+				return;
+			}
+		}
+		else
+		isRunningMonster = running;
+	}
+
+	public bool GetRunning(){
+		return isRunningMonster;
 	}
 
 	public int GetCombo(){
@@ -92,6 +117,7 @@ public class GameManager : MonoBehaviour {
 			MonsterQueueNum--;
 			GameObject tmp;
 			tmp = Instantiate (monster, new Vector3 (x, 0, 0), Quaternion.identity);
+			tmp.GetComponent<Monster> ().SetManager (this);
 			listMonster.Add (tmp);
 			print ("Create Complete");
 

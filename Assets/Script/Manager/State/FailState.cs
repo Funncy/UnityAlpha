@@ -27,7 +27,7 @@ public class FailState : GameState {
 
 
 
-		if (!listMonster[0].GetComponent<Monster>().isRunning()) {
+		if (!gameManager.GetRunning()) {
 			//시간이 지나면 다시 Push State Chnage
 			gameManager.ChangeState ((int)State.Data.PushState);
 		}

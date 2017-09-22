@@ -30,7 +30,7 @@ public class PushState : GameState {
 			gameManager.ChangeState ((int)State.Data.EndState);
 	
 
-		if (!listMonster[0].GetComponent<Monster>().isRunning()) {  
+		if (!gameManager.GetRunning()) {  
 			Time.timeScale = 1f;
 			gameManager.ChangeState ((int)State.Data.AttackState);
 		}
