@@ -20,7 +20,6 @@ public class FailState : GameState {
 		timer = 0;
 		foreach(var mons in listMonster){
 			mons.GetComponent<Monster> ().Fail ();
-
 		}
 	}
 

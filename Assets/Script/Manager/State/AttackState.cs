@@ -42,22 +42,25 @@ public class AttackState : GameState {
 				gameManager.ChangeState ((int)State.Data.PushState);
 			}
 		}else if (timer > 1f) {
-				//Time Over  -> fail State	
+			//Time Over  -> fail State	
 			if (!listMonster [0].GetComponent<Monster> ().isRunning ())
 				//print ("change Fail state");
 				gameManager.ChangeState ((int)State.Data.FailState);
-			}
-		
-		
+		}
+
+
 	}
 
 	public override void Inputkey(char key){
 		//공격키 한번만 입력 되게 하기 
+		print("Button Clicked!!");
 		if (!isAttacked && listMonster.Count>0) {
+			
 			GameObject tmp = listMonster [0]; //죽지않았경우 다시 넣기 위한 임시 저장 
 			float lastPosX = listMonster [listMonster.Count - 1].transform.position.x; 
 
 			//Attacked
+			print("Monster Attacked!!!!!!!!!!!!!!!!!!!!");
 			tmp.GetComponent<Monster> ().Attacked (lastPosX + 2, 0,gameManager.GetAttackDamage());
 			listMonster.RemoveAt (0);
 

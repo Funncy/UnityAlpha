@@ -18,12 +18,17 @@ public class GameManager : MonoBehaviour {
 	//remain queue number
 	private int MonsterQueueNum;
 
+	private int Combo;
+
+	private GameObject monster;
+
 	// Use this for initialization
 	void Start () {
 
 		//Player Init
 		//bring Saved Player Data
 		//player = new Player();
+		Combo = 0;
 
 		listMonster = new List<GameObject> ();
 
@@ -34,7 +39,7 @@ public class GameManager : MonoBehaviour {
 
 		//temporary monster create
 		GameObject tmp;
-		GameObject monster = Resources.Load ("Prefabs/Monster") as GameObject;
+		monster = Resources.Load ("Prefabs/Monster") as GameObject;
 		for (int i = 0; i < 10; i += 2) {
 			print ("create monster " + i);
 			tmp = Instantiate (monster, new Vector3 (i, 0, 0), Quaternion.identity);
@@ -62,6 +67,14 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public int GetCombo(){
+		return Combo;
+	}
+
+	public void SetCombo(int combo){
+		Combo = combo;
+	}
+
 	public int GetRemainMonsterNum(){
 		return MonsterQueueNum;
 	}
@@ -77,11 +90,10 @@ public class GameManager : MonoBehaviour {
 	public void CreateRemainMonster(float x, float y){
 		if (MonsterQueueNum > 0) {
 			MonsterQueueNum--;
-			print ("Create New Monster " + x + " " + y);
 			GameObject tmp;
-			GameObject monster = Resources.Load ("Prefabs/Monster") as GameObject;
-			tmp = Instantiate (monster, new Vector3 (x, y, 0), Quaternion.identity);
+			tmp = Instantiate (monster, new Vector3 (x, 0, 0), Quaternion.identity);
 			listMonster.Add (tmp);
+			print ("Create Complete");
 
 		}
 	}
@@ -106,7 +118,6 @@ public class GameManager : MonoBehaviour {
 			break;
 
 		}
-		print("Stage Chnage "+state);
 		gameState.Restart ();
 	}
 
@@ -114,6 +125,9 @@ public class GameManager : MonoBehaviour {
 		gameState.Inputkey ('a');
 	}
 
+	public bool AttakedPlayer(int damage){
+		return player.Attacked (damage);
+	}
 	
 	// Update is called once per frame
 	void Update () {

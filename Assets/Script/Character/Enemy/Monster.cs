@@ -12,4 +12,5 @@ public abstract class Monster : MonoBehaviour {
 	public abstract void Fail();
 	public abstract void Attacked(float x, float y, int damage);
 	public abstract int GetHP();
+	public abstract int GetDamage();
 }

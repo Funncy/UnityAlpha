@@ -18,6 +18,7 @@ public class PushState : GameState {
 
 	public override void Restart(){
 		Time.timeScale = 5f;
+		print ("Move Start");
 		for (int i = 0; i < listMonster.Count; i++) {
 			listMonster [i].GetComponent<Monster> ().Move ();
 		}
