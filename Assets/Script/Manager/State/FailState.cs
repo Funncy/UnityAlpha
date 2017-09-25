@@ -18,6 +18,7 @@ public class FailState : GameState {
 
 	public override void Restart(){
 		timer = 0;
+
 		foreach(var mons in listMonster){
 			mons.GetComponent<Monster> ().Fail ();
 		}

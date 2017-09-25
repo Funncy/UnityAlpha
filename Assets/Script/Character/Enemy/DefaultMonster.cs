@@ -13,13 +13,29 @@ public class DefaultMonster : Monster {
 	private float inverseMoveTime;
 	private GameManager gameManager;
 
+	private List<char> Combokey;
+
 	public void Awake(){
+		print ("Create Monster");
 		speed = .2f;
 		HP = 10;
 		Armor = 5;
-		AttackDamage = 10;
+		AttackDamage = 0;
 		inverseMoveTime = 1f / speed;
 		rb2d = GetComponent<Rigidbody2D> ();
+		Combokey = new List<char> ();
+
+		//default
+		Combokey.Add ('A');
+		Combokey.Add ('B');
+	}
+
+	public override void SetDefaultCombo(){
+		print ("Clear Combo()");
+		Combokey.Clear ();
+		Combokey.Add ('A');
+		Combokey.Add ('B');
+		print ("Clear Combo End()");
 	}
 
 	public override void SetManager(GameManager gameManager){
@@ -35,11 +51,26 @@ public class DefaultMonster : Monster {
 		return AttackDamage;
 	}
 
+	public override int InputKey(char x){
+		print ("Press Key = " + x);
+		print ("current Monster Combo Count=" + Combokey.Count);
+		//Combo all clear
+		if (Combokey.Count == 0)
+			return 0;
 
+		//correct Input Key
+		if (Combokey [0] == x) {
+			Combokey.RemoveAt (0);
+			return Combokey.Count;
+		} else{
+			SetDefaultCombo(); // combo reset
+			return -1; //incorrect Input key
+		}
+
+	}
 		
 
 	public override void Fail(){
-		print ("Fail Called ");
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (1.5f, 1.5f);
 		Vector2 end2 = start + new Vector2 (2, 0);
@@ -48,7 +79,6 @@ public class DefaultMonster : Monster {
 	}
 
 	public override void Move(){
-		print ("Move Called ");
 		Vector2 start = transform.position;
 		Vector2 end = start + new Vector2 (-2, 0);
 		gameManager.SetRunning (true);
@@ -56,7 +86,6 @@ public class DefaultMonster : Monster {
 	}
 
 	public override void Attacked(float x ,float y,int damage){
-		print ("Attacked Called ");
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (10, 7);
 		Vector2 end2 = new Vector2 (x, 0);
@@ -80,9 +109,10 @@ public class DefaultMonster : Monster {
 
 			transform.position = new Vector3 (end2.x, end2.y, 0);
 			gameManager.SetAttackEnd (false);
+			//set default combo
+			SetDefaultCombo();
 		} else {
 			gameManager.SetAttackEnd (false);
-			print ("Destroy");
 			Destroy (gameObject);
 		}
 		//print ("Attacked End x="+transform.position.x+" y="+transform.position.y+" HP="+HP);
@@ -115,7 +145,7 @@ public class DefaultMonster : Monster {
 
 	protected IEnumerator SmoothMovement (Vector3 end){
 		
-		print ("SmoothMovement  monster MoveTime="+inverseMoveTime+" speed="+speed+" Time Scale="+Time.timeScale);
+		//print ("SmoothMovement  monster MoveTime="+inverseMoveTime+" speed="+speed+" Time Scale="+Time.timeScale);
 		float sqrREmainingDistance = (transform.position - end).sqrMagnitude;
 		while (sqrREmainingDistance > float.Epsilon) {
 			Vector3 newPosition = Vector3.MoveTowards (rb2d.position, end, inverseMoveTime * Time.deltaTime);

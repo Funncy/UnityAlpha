@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour {
 			tmp = Instantiate (monster, new Vector3 (x, 0, 0), Quaternion.identity);
 			tmp.GetComponent<Monster> ().SetManager (this);
 			listMonster.Add (tmp);
-			print ("Create Complete");
+			//print ("Create Complete");
 
 		}
 	}
@@ -145,6 +145,18 @@ public class GameManager : MonoBehaviour {
 
 		}
 		gameState.Restart ();
+	}
+
+	public void PressButtonA(){
+		gameState.Inputkey ('A');
+	}
+
+	public void PressButtonB(){	
+		gameState.Inputkey ('B');
+	}
+
+	public void PressButtonC(){	
+		gameState.Inputkey ('C');
 	}
 
 	public void PressButton(){

@@ -9,7 +9,7 @@ public class AttackState : GameState {
 	private float timer;
 	private List<GameObject> listMonster;
 
-	private bool isAttacked;
+	private int isAttacked;
 
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
@@ -17,7 +17,7 @@ public class AttackState : GameState {
 	}
 
 	public override void Restart(){
-		isAttacked = false;
+		isAttacked = 1; // 1: default , 2:clear , 3:fail
 		timer = 0;
 	}
 
@@ -34,16 +34,17 @@ public class AttackState : GameState {
 			}
 		}
 
-		if (isAttacked) {
+		if (isAttacked == 2) { // Success
 			if (listMonster.Count == 0)
 				gameManager.ChangeState ((int)State.Data.EndState);
-			else if (!gameManager.GetRunning()) {
+			else if (!gameManager.GetRunning ()) {
 				//print ("Attacked clear Push Start");
 				gameManager.ChangeState ((int)State.Data.PushState);
 			}
-		}else if (timer > 1f) {
+		} else if (isAttacked == 3 || timer > 1f) { //Fail
 			//Time Over  -> fail State	
 			if (!gameManager.GetRunning ()) {
+				listMonster [0].GetComponent<Monster> ().SetDefaultCombo ();
 				if (!gameManager.AttakedPlayer (listMonster [0].GetComponent<Monster> ().GetDamage ()))
 					gameManager.ChangeState ((int)State.Data.EndState);
 				else
@@ -52,32 +53,48 @@ public class AttackState : GameState {
 		}
 	}
 
-	public override void Inputkey(char key){
-		//공격키 한번만 입력 되게 하기 
-		print("Button Clicked!!");
-		if (!isAttacked && listMonster.Count>0) {
-			
-			GameObject tmp = listMonster [0]; //죽지않았경우 다시 넣기 위한 임시 저장 
-			float lastPosX = listMonster [listMonster.Count - 1].transform.position.x; 
+	public void AttackEmeny(){
 
-			//Attacked
-			print("Monster Attacked!!!!!!!!!!!!!!!!!!!!");
-			tmp.GetComponent<Monster> ().Attacked (lastPosX + 2, 0,gameManager.GetAttackDamage());
-			listMonster.RemoveAt (0);
+		if (listMonster.Count <= 0)
+			return;
+		print ("attackEnemy");
+		GameObject tmp = listMonster [0]; //죽지않았경우 다시 넣기 위한 임시 저장 
+		float lastPosX = listMonster [listMonster.Count - 1].transform.position.x; 
 
-			//still Alive
-			if (tmp.GetComponent<Monster> ().GetHP () > 0) {
-				print ("Monster Still alive");
-				listMonster.Add(tmp);
-			}else {
-				//Create New Monster
-				print("Monster die and create monster");
-				gameManager.CreateRemainMonster (lastPosX + 2,0);
-			}
+		//Attacked
+		tmp.GetComponent<Monster> ().Attacked (lastPosX + 2, 0,gameManager.GetAttackDamage());
+		listMonster.RemoveAt (0);
 
-
-
-			isAttacked = true;
+		//still Alive
+		if (tmp.GetComponent<Monster> ().GetHP () > 0) {
+			listMonster.Add(tmp);
+		}else {
+			//Create New Monster
+			gameManager.CreateRemainMonster (lastPosX + 2,0);
 		}
+
+		print ("Attack End");
+	}
+
+	public override void Inputkey(char key){
+		int result;
+		print ("InputKey Clicked");
+
+		if ( (isAttacked != 1) || (listMonster.Count <= 0) ){
+			print ("Can not Attack " + isAttacked + " co=" + listMonster.Count);
+			return; //Already attack Enemy or clear Monster
+		}
+
+		result = listMonster [0].GetComponent<Monster> ().InputKey (key);
+		print ("result = " + result);
+		if (result == -1) {
+			//Incorrect Input key
+			isAttacked = 3;
+		} else if (result == 0) {
+			//Clear Combo 
+			isAttacked = 2; 
+			AttackEmeny ();
+		}
+			
 	}
 }
