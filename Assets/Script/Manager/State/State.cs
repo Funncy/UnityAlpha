@@ -13,4 +13,10 @@ public static class State  {
 		EndState = 5
 	}
 
+	public enum Combo : int{
+		Perfect = 1,
+		Good = 2,
+		Cool = 3
+	}
+
 }

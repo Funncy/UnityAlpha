@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
 	public Player player;
+
+	public Text ComboStateText;
+
 	private List<GameObject> listMonster;
 
 	private GameState gameState;
@@ -19,10 +22,14 @@ public class GameManager : MonoBehaviour {
 	private int MonsterQueueNum;
 
 	private int Combo;
+	private int ComboState;
 
 	private GameObject monster;
 	private bool isRunningMonster;
 	private int RunningCount;
+
+
+
 
 	// Use this for initialization
 	void Start () {
@@ -36,7 +43,7 @@ public class GameManager : MonoBehaviour {
 
 		listMonster = new List<GameObject> ();
 
-		player = Instantiate (player, new Vector3 (-8.7f, -1.7f, 0), Quaternion.identity);
+		player = Instantiate (player, new Vector3 (-8.7f, -2f, 0), Quaternion.identity);
 		//GameObject prefab = Resources.Load ("Prefab/Player") as GameObject;
 		//prefab.transform.parent = this;
 
@@ -45,7 +52,7 @@ public class GameManager : MonoBehaviour {
 		GameObject tmp;
 		monster = Resources.Load ("Prefabs/Monster") as GameObject;
 		for (int i = 0; i < 10; i += 2) {
-			tmp = Instantiate (monster, new Vector3 (i, 0, 0), Quaternion.identity);
+			tmp = Instantiate (monster, new Vector3 (i, -1.94f, 0), Quaternion.identity);
 			tmp.GetComponent<Monster> ().SetManager (this);
 			listMonster.Add (tmp);
 		}
@@ -69,6 +76,22 @@ public class GameManager : MonoBehaviour {
 
 		gameState = startState;
 
+	}
+
+	public void SetComboState(int state){
+		print (" Combostate = " + state);
+		ComboState = state;
+		switch (state) {
+		case (int)State.Combo.Perfect:
+			ComboStateText.text = "Perfect";
+			break;
+		case (int)State.Combo.Good:
+			ComboStateText.text = "Good";
+			break;
+		case (int)State.Combo.Cool:
+			ComboStateText.text = "Cool";
+			break;
+		}
 	}
 
 	public void SetAttackEnd(bool running){
@@ -116,7 +139,7 @@ public class GameManager : MonoBehaviour {
 		if (MonsterQueueNum > 0) {
 			MonsterQueueNum--;
 			GameObject tmp;
-			tmp = Instantiate (monster, new Vector3 (x, 0, 0), Quaternion.identity);
+			tmp = Instantiate (monster, new Vector3 (x, -1.94f, 0), Quaternion.identity);
 			tmp.GetComponent<Monster> ().SetManager (this);
 			listMonster.Add (tmp);
 			//print ("Create Complete");

@@ -1004,6 +1004,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114670656598405360, guid: 7b88cf60c4dfc4a23944f75329838ea7,
+        type: 2}
+      propertyPath: ComboStateText
+      value: 
+      objectReference: {fileID: 1723164764}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7b88cf60c4dfc4a23944f75329838ea7, type: 2}
   m_IsPrefabParent: 0
@@ -1145,14 +1150,14 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 8165a2a28668a4ce1a97a4457ae30a41, type: 3}
     m_FontSize: 40
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 154
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Score
 --- !u!222 &1723164765

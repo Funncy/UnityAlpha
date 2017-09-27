@@ -16,7 +16,7 @@ public class DefaultMonster : Monster {
 	private List<char> Combokey;
 
 	public void Awake(){
-		print ("Create Monster");
+	//	print ("Create Monster");
 		speed = .2f;
 		HP = 10;
 		Armor = 5;
@@ -31,11 +31,11 @@ public class DefaultMonster : Monster {
 	}
 
 	public override void SetDefaultCombo(){
-		print ("Clear Combo()");
+	//	print ("Clear Combo()");
 		Combokey.Clear ();
 		Combokey.Add ('A');
 		Combokey.Add ('B');
-		print ("Clear Combo End()");
+	//	print ("Clear Combo End()");
 	}
 
 	public override void SetManager(GameManager gameManager){
@@ -52,8 +52,8 @@ public class DefaultMonster : Monster {
 	}
 
 	public override int InputKey(char x){
-		print ("Press Key = " + x);
-		print ("current Monster Combo Count=" + Combokey.Count);
+	//	print ("Press Key = " + x);
+	//	print ("current Monster Combo Count=" + Combokey.Count);
 		//Combo all clear
 		if (Combokey.Count == 0)
 			return 0;
@@ -88,7 +88,7 @@ public class DefaultMonster : Monster {
 	public override void Attacked(float x ,float y,int damage){
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (10, 7);
-		Vector2 end2 = new Vector2 (x, 0);
+		Vector2 end2 = new Vector2 (x, y);
 		gameManager.SetRunning (true);
 		HP -= damage; //HP decrease
 		StartCoroutine (SmoothAttacked (end1, end2));
