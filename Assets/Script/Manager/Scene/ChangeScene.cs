@@ -8,6 +8,7 @@ public class ChangeScene : MonoBehaviour {
 	public void SceneChangeToGame() {
 		SceneManager.LoadScene ("GameScene");
 		// test
+		//test2
 	}
 
 	public void SceneChangeToHome() {
