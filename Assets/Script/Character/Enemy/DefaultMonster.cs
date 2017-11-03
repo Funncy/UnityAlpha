@@ -17,7 +17,7 @@ public class DefaultMonster : Monster {
 
 	public void Awake(){
 	//	print ("Create Monster");
-		speed = .2f;
+		speed = .1f;
 		HP = 10;
 		Armor = 5;
 		AttackDamage = 0;

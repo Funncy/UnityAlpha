@@ -15,16 +15,18 @@ public class AttackState : GameState {
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
 		listMonster = gameManager.getListMonster ();
-	}
+        Time.timeScale = 1f;
+    }
 
 	public override void Restart(){
 		isAttacked = 1; // 1: default , 2:clear , 3:fail
 		timer = 0;
 		isCombo = false;
-	}
+        Time.timeScale = 1f;
+    }
 
 	public override void Update () {
-		Time.timeScale = 1f;
+		//Time.timeScale = 1f;
 		timer += Time.deltaTime;
 
 		if (listMonster.Count == 0)
@@ -39,7 +41,7 @@ public class AttackState : GameState {
 		}
 
 		if (isAttacked == 2) { // Success
-			if (!isCombo) {
+            if (!isCombo) {
 				if (timer <= 0.6f)
 					gameManager.SetComboState ((int)State.Combo.Perfect);
 				else if (timer <= 0.8f)
@@ -103,15 +105,16 @@ public class AttackState : GameState {
 			//print ("Can not Attack " + isAttacked + " co=" + listMonster.Count);
 			return; //Already attack Enemy or clear Monster
 		}
-
-		result = listMonster [0].GetComponent<Monster> ().InputKey (key);
+ 
+        result = listMonster [0].GetComponent<Monster> ().InputKey (key);
 		print ("result = " + result);
 		if (result == -1) {
 			//Incorrect Input key
 			isAttacked = 3;
 		} else if (result == 0) {
-			//Clear Combo 
-			isAttacked = 2; 
+            //Clear Combo 
+            Time.timeScale = 2f;
+            isAttacked = 2; 
 			AttackEmeny ();
 		}
 			
