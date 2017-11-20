@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 
 		listMonster = new List<GameObject> ();
 
-		player = Instantiate (player, new Vector3 (-8.7f, -2f, 0), Quaternion.identity);
+		//player = Instantiate (player, new Vector3 (-8.7f, -2f, 0), Quaternion.identity);
 		//GameObject prefab = Resources.Load ("Prefab/Player") as GameObject;
 		//prefab.transform.parent = this;
 
