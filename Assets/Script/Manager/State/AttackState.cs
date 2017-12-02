@@ -12,6 +12,10 @@ public class AttackState : GameState {
 	private int isAttacked;
 	private bool isCombo;
 
+	private int S_P = 10;
+	private int S_G = 7;
+	private int S_C = 4;
+
 	public override void Init(GameManager gameManager){
 		this.gameManager = gameManager;
 		listMonster = gameManager.getListMonster ();
@@ -32,22 +36,26 @@ public class AttackState : GameState {
 		if (listMonster.Count == 0)
 			gameManager.ChangeState ((int)State.Data.EndState);
 		
-		if (listMonster [0].transform.position.x > -5f && !gameManager.GetRunning()) {
-			print ("listMonster 0 x > -1.5 ");
+		if (listMonster [0].transform.position.x > -4f && !gameManager.GetRunning()) {
+//			print ("listMonster 0 x > -1.5 ");
 			if (timer > 0.5f ) {
-				print ("listmonet pish");
+//				print ("listmonet pish");
 				gameManager.ChangeState ((int)State.Data.PushState);
 			}
 		}
 
 		if (isAttacked == 2) { // Success
             if (!isCombo) {
-				if (timer <= 0.6f)
+				if (timer <= 0.6f) {
 					gameManager.SetComboState ((int)State.Combo.Perfect);
-				else if (timer <= 0.8f)
+					gameManager.SetScore (S_P);
+				} else if (timer <= 0.8f) {
 					gameManager.SetComboState ((int)State.Combo.Good);
-				else
+					gameManager.SetScore (S_G);
+				} else {
 					gameManager.SetComboState ((int)State.Combo.Cool);
+					gameManager.SetScore (S_C);
+				}
 				isCombo = true;
 			}
 
@@ -81,16 +89,21 @@ public class AttackState : GameState {
 		//print ("attackEnemy");
 		GameObject tmp = listMonster [0]; //죽지않았경우 다시 넣기 위한 임시 저장 
 		float lastPosX = listMonster [listMonster.Count - 1].transform.position.x; 
-
+		print ("last Posx= " + lastPosX);
 		//Attacked
 		tmp.GetComponent<Monster> ().Attacked (lastPosX + 2, -1.94f,gameManager.GetAttackDamage());
 		listMonster.RemoveAt (0);
 
+		gameManager.GetExp(30);
+		//print ("Get Exp!! "+gameManager.player.GetExp()+" LV="+gameManager.player.GetLV());
 		//still Alive
 		if (tmp.GetComponent<Monster> ().GetHP () > 0) {
+			print ("Aliv!!");
 			listMonster.Add(tmp);
 		}else {
 			//Create New Monster
+			//add Exp!
+			print("Die Monster");
 			gameManager.CreateRemainMonster (lastPosX + 2,0);
 		}
 
@@ -107,7 +120,7 @@ public class AttackState : GameState {
 		}
  
         result = listMonster [0].GetComponent<Monster> ().InputKey (key);
-		print ("result = " + result);
+		//print ("result = " + result);
 		if (result == -1) {
 			//Incorrect Input key
 			isAttacked = 3;

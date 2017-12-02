@@ -13,6 +13,7 @@ public abstract class Monster : MonoBehaviour {
 	public abstract void Attacked(float x, float y, int damage);
 	public abstract int InputKey (char x);
 	public abstract void SetDefaultCombo ();
+	public abstract void SetDefaultData(int kind);
 	public abstract int GetHP();
 	public abstract int GetDamage();
 }

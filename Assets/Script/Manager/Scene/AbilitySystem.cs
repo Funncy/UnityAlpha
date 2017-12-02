@@ -14,6 +14,7 @@ public class AbilitySystem : MonoBehaviour {
 	}
 
 	public void SetAbilityPoint() {
+		//DB Manager Get Ability Point 
 		this.attack = 3;
 		this.defence = 4;
 		this.health = 5;
@@ -34,6 +35,7 @@ public class AbilitySystem : MonoBehaviour {
 		}
 		attack += delta;
 		remain -= delta;
+		//DB UPdate
 		this.GetAbilityPoint ();
 	}
 
@@ -44,6 +46,7 @@ public class AbilitySystem : MonoBehaviour {
 		}
 		defence += delta;
 		remain -= delta;
+		//DB Update
 		this.GetAbilityPoint ();
 	}
 
@@ -54,6 +57,7 @@ public class AbilitySystem : MonoBehaviour {
 		}
 		health += delta;
 		remain -= delta;
+		//DB Update
 		this.GetAbilityPoint ();
 	}
 }

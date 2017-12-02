@@ -9,18 +9,22 @@ public class DefaultMonster : Monster {
 	private int AttackDamage;
 	private Rigidbody2D rb2d;
 	private float speed;
+	private int Kind;
 
 	private float inverseMoveTime;
 	private GameManager gameManager;
 
 	private List<char> Combokey;
 
+	private float posX;
+	private float posY;
+
 	public void Awake(){
 	//	print ("Create Monster");
 		speed = .1f;
 		HP = 10;
 		Armor = 5;
-		AttackDamage = 0;
+		AttackDamage = 5;
 		inverseMoveTime = 1f / speed;
 		rb2d = GetComponent<Rigidbody2D> ();
 		Combokey = new List<char> ();
@@ -30,11 +34,48 @@ public class DefaultMonster : Monster {
 		Combokey.Add ('B');
 	}
 
+	public override void SetDefaultData(int kind){
+		//	print ("Clear Combo()");
+		Kind = kind;
+		//DB Get Data from DB select Kind
+		if (kind == 0) {
+			Combokey.Clear ();
+			Combokey.Add ('A');
+			Combokey.Add ('B');
+			posY = -2.24f;
+		} else if (kind == 1) {
+			Combokey.Clear ();
+			Combokey.Add ('A');
+			Combokey.Add ('C');
+			posY = -2.24f;
+		} else {
+			Combokey.Clear ();
+			Combokey.Add ('B');
+			Combokey.Add ('B');
+			posY = -1.74f;
+		}
+
+		//	print ("Clear Combo End()");
+	}
+		
+
 	public override void SetDefaultCombo(){
 	//	print ("Clear Combo()");
-		Combokey.Clear ();
-		Combokey.Add ('A');
-		Combokey.Add ('B');
+
+		//DB Get Data from DB select Kind
+		if (Kind == 0) {
+			Combokey.Clear ();
+			Combokey.Add ('A');
+			Combokey.Add ('B');
+		} else if (Kind == 1) {
+			Combokey.Clear ();
+			Combokey.Add ('A');
+			Combokey.Add ('C');
+		} else {
+			Combokey.Clear ();
+			Combokey.Add ('B');
+			Combokey.Add ('B');
+		}
 	//	print ("Clear Combo End()");
 	}
 
@@ -88,7 +129,7 @@ public class DefaultMonster : Monster {
 	public override void Attacked(float x ,float y,int damage){
 		Vector2 start = transform.position;
 		Vector2 end1 = start + new Vector2 (10, 7);
-		Vector2 end2 = new Vector2 (x, y);
+		Vector2 end2 = new Vector2 (x, posY);
 		gameManager.SetRunning (true);
 		HP -= damage; //HP decrease
 		StartCoroutine (SmoothAttacked (end1, end2));

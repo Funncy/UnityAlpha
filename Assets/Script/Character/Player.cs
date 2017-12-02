@@ -10,6 +10,7 @@ public class Player  : MonoBehaviour{
 	int AttackDamage_sword;
 	int AttackDamage_bow;
 	int AttackDamage_magic;
+	int Exp;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,32 @@ public class Player  : MonoBehaviour{
 		AttackDamage_bow = 10;
 		AttackDamage_magic = 10;
 		AttackDamage_sword = 5;
+		Exp = 0;
+	}
+
+	public void SetData(int LV, int HP, int Armor, int AttackDamage){
+		this.LV = LV;
+		this.HP = HP;
+		this.Armor = Armor;
+		this.AttackDamage_sword = AttackDamage;
+	}
+
+	public bool GetExp(int NextExp, int GetExp){
+		Exp += GetExp;
+		if (Exp >= NextExp) {
+			Exp -= NextExp;
+			LV++; //DB Update
+			return true;
+		}
+		return false;
+	}
+
+	public int GetExp(){
+		return Exp;
+	}
+
+	public int GetLV(){
+		return LV;
 	}
 
 	public int GetHP(){
